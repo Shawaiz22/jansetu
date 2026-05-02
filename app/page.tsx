@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { verifyCivicIssue } from "./actions";
 import { ArrowBigUp, Flag, BadgeCheck, UploadCloud, MapPin, AlertCircle, Loader2, Landmark, Phone, ShieldCheck, LogOut, ChevronRight } from "lucide-react";
 
@@ -49,8 +49,13 @@ const INITIAL_ISSUES: Issue[] = [
 ];
 
 export default function JanSetuPage() {
+  const [mounted, setMounted] = useState(false);
   const [issues, setIssues] = useState<Issue[]>(INITIAL_ISSUES);
   
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Auth State
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authPhone, setAuthPhone] = useState("");
@@ -70,6 +75,10 @@ export default function JanSetuPage() {
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  if (!mounted) {
+    return <div className="min-h-screen bg-slate-50" />;
+  }
 
   const handleSendOTP = (e: React.FormEvent) => {
     e.preventDefault();
@@ -354,7 +363,6 @@ export default function JanSetuPage() {
                     value={otpCode}
                     onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 4))}
                     className="w-full px-4 py-4 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-emerald-500 focus:bg-white outline-none transition-all text-center text-3xl font-black tracking-[1em]"
-                    autoFocus
                     required
                   />
                   <p className="text-center text-xs text-slate-400 mt-4">OTP sent to +91 {authPhone}</p>
