@@ -14,7 +14,12 @@ export async function verifyCivicIssue(imageBase64: string, description: string)
     if (!process.env.GEMINI_API_KEY) {
       console.warn("No GEMINI_API_KEY found, simulating AI verification.");
       await new Promise(resolve => setTimeout(resolve, 1500));
-      return { status: "VALID" };
+      return { 
+        status: "VALID",
+        title: "Verified Civic Issue",
+        description: description,
+        category: "General"
+      };
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
